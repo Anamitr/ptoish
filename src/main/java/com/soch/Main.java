@@ -24,8 +24,8 @@ public class Main {
 
         List<Set> setList = new LinkedList();
         setList.add(new HashSet());
-//        setList.add(new LinkedHashSet());
-//        setList.add(new TreeSet());
+        setList.add(new LinkedHashSet());
+        setList.add(new TreeSet());
 
         List<Operator> operatorList = new LinkedList<>();
         operatorList.add(new AddOperator());
@@ -34,24 +34,14 @@ public class Main {
         operatorList.add(new CheckIfExistsOperator());
 
         for(Operator operator : operatorList) {
+            Map<String, List<Pair>> operatorData = new HashMap<>();
             for (Set set : setList) {
                 List<Pair> resultData = testSetWithOperator(set, operator);
-                plotData(operator.getOperationName(), resultData);
+                operatorData.put(set.getClass().getSimpleName(), resultData);
+//                plotData(operator.getOperationName(), resultData);
             }
+            plotData(operator.getOperationName(), operatorData);
         }
-
-//        for (Set set : setList) {
-//            System.out.println("Testing class " + set.getClass().getSimpleName());
-//            List<Pair> resultData = testSetWithOperator(set, new AddOperator());
-////            plotData(resultData);
-////            testSetWithOperator(set, new RemoveOperator());
-////            testSetWithOperator(set, new BrowseOperator());
-////            testSetWithOperator(set, new CheckIfExistsOperator());
-//        }
-
-//        while (true) {
-//            testSet.add("testString");
-//        }
     }
 
     private static List<Pair> testSetWithOperator(Set set, Operator operator) {
@@ -79,7 +69,7 @@ public class Main {
         }
     }
 
-    private static void plotData(String operationName, List<Pair> resultData) {
+    private static void plotData(String operationName, Map<String, List<Pair>> resultData) {
         final Plotter plotter = new Plotter(operationName, resultData);
         plotter.pack();
         RefineryUtilities.centerFrameOnScreen(plotter);

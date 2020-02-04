@@ -12,16 +12,28 @@ import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
 
 import java.util.List;
+import java.util.Map;
 
 public class Plotter extends ApplicationFrame {
-    public Plotter(String title, List<Pair> data) {
+    public Plotter(String title, Map<String, List<Pair>> operatorData) {
         super(title);
 
-        final XYSeries series = new XYSeries("Random data", false);
-        for (Pair<Integer, Integer> pair : data) {
-            series.add(pair.getKey(), pair.getValue());
+        final XYSeriesCollection xySeriesCollection = new XYSeriesCollection();
+
+        for(String key : operatorData.keySet()) {
+            final XYSeries series = new XYSeries(key, false);
+            List<Pair> data = operatorData.get(key);
+
+            for (Pair<Integer, Integer> pair : data) {
+                series.add(pair.getKey(), pair.getValue());
+            }
+            xySeriesCollection.addSeries(series);
         }
-        final XYSeriesCollection xySeriesCollection = new XYSeriesCollection(series);
+
+//        final XYSeries series = new XYSeries("Random data", false);
+//        for (Pair<Integer, Integer> pair : data) {
+//            series.add(pair.getKey(), pair.getValue());
+//        }
         final JFreeChart chart = ChartFactory.createXYLineChart(title, "set size",
                 "nanoseconds", xySeriesCollection, PlotOrientation.VERTICAL, true, true, false);
 
